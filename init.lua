@@ -3,10 +3,19 @@ vim.g.maplocalleader = ' '
 
 vim.g.have_nerd_font = false
 
+vim.opt.conceallevel = 1
+
 vim.opt.relativenumber = true
+
+vim.opt.autochdir = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
+
+vim.opt.tabstop = 4
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.smarttab = true
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
@@ -470,8 +479,11 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      require 'lspconfig'.ts_ls.setup {}
+      require 'lspconfig'.ts_ls.setup {
+        autostart = false,
+      }
       require 'lspconfig'.vtsls.setup {
+        autostart = false,
         -- explicitly add default filetypes, so that we can extend
         -- them in related extras
         filetypes = {
@@ -510,11 +522,17 @@ require('lazy').setup({
         },
       }
       require 'lspconfig'.tailwindcss.setup {
+        autostart = false,
         filetypes_exclude = { "markdown" },
       }
-      require 'lspconfig'.eslint.setup {}
-      require 'lspconfig'.rust_analyzer.setup {}
+      require 'lspconfig'.eslint.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.rust_analyzer.setup {
+        autostart = false,
+      }
       require 'lspconfig'.gopls.setup {
+        autostart = false,
         gopls = {
           settings = {
             gopls = {
@@ -554,8 +572,11 @@ require('lazy').setup({
           },
         },
       }
-      require 'lspconfig'.lua_ls.setup {}
+      require 'lspconfig'.lua_ls.setup {
+        autostart = false,
+      }
       require 'lspconfig'.clangd.setup {
+        autostart = false,
         keys = {
           { "<leader>ch", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
         },
@@ -592,6 +613,7 @@ require('lazy').setup({
         filetypes = { 'c', 'cpp', 'objcpp', 'cuda' }
       }
       require 'lspconfig'.jsonls.setup {
+        autostart = false,
         on_new_config = function(new_config)
           new_config.settings.json.schemas = new_config.settings.json.schemas or {}
           vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
@@ -605,25 +627,50 @@ require('lazy').setup({
           },
         },
       }
-      require 'lspconfig'.dockerls.setup {}
-      require 'lspconfig'.docker_compose_language_service.setup {}
-      require 'lspconfig'.neocmake.setup {}
-      require 'lspconfig'.jdtls.setup {}
+      require 'lspconfig'.dockerls.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.docker_compose_language_service.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.neocmake.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.jdtls.setup {
+        autostart = false,
+      }
       require 'lspconfig'.ltex.setup {
+        autostart = false,
         settings = {
           ltex = {
             language = { "en-US", "de-DE" },
           },
         },
       }
-      require 'lspconfig'.css_variables.setup {}
-      require 'lspconfig'.pyright.setup {}
-      require 'lspconfig'.html.setup {}
-      require 'lspconfig'.sqls.setup {}
-      require 'lspconfig'.bashls.setup {}
-      require 'lspconfig'.nil_ls.setup {}
-      require 'lspconfig'.marksman.setup {}
-      require 'lspconfig'.v_analyzer.setup {}
+      require 'lspconfig'.css_variables.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.pyright.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.html.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.sqls.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.bashls.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.nil_ls.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.marksman.setup {
+        autostart = false,
+      }
+      require 'lspconfig'.v_analyzer.setup {
+        autostart = false,
+      }
     end,
   },
   {
@@ -878,6 +925,39 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  {
+    "echasnovski/mini.move",
+    opts = {
+      mappings = {
+        -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+        left = '<M-h>',
+        right = '<M-l>',
+        down = '<M-j>',
+        up = '<M-k>',
+
+        -- Move current line in Normal mode
+        line_left = '<M-h>',
+        line_right = '<M-l>',
+        line_down = '<M-j>',
+        line_up = '<M-k>',
+      },
+
+      -- Options which control moving behavior
+      options = {
+        -- Automatically reindent selection during linewise vertical move
+        reindent_linewise = true,
+      },
+    }
+  },
+  {
+    "mewsen/direnv.nvim",
+    opts = {
+      async = true,
+      on_direnv_finished = function()
+        vim.cmd("LspStart")
+      end
+    }
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
@@ -925,6 +1005,10 @@ require('lazy').setup({
       lazy = '💤 ',
     },
   },
+  rocks = {
+    enabled = false,
+    hererocks = false,
+  }
 })
 
 -- The line beneath this is called `modeline`. See `:help modeline`
